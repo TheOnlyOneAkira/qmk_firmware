@@ -28,7 +28,10 @@
 #define SET_INDICATORS(hsv) \
 	{0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
     {36+0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}
-
+	
+#define SET_LAYER_ID(hsv) 	\
+	{0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
+    {36+0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}
 
 
 
@@ -203,7 +206,83 @@ keyboard_layouts = {
 
 
 
+#ifdef RGBLIGHT_ENABLE
 
+	// https://nest.pijul.com/sunflower/qmk_firmware:main/BYRPMFHCIOX2Y.T6BJIBA
+	
+    // _BASE = 0,
+    // _SETTINGS,
+	// _SYMBOLS,
+    // _SHORTCUTS,
+    // _NUMPAD,
+    // _EXTRAS,
+	// _BOARD
+	
+	char layer_state_str[70];
+	
+	// _BASE,
+	const rgblight_segment_t PROGMEM layer_base_lights[] = RGBLIGHT_LAYER_SEGMENTS(
+		SET_LAYER_ID(HSV_RED)
+	);
+	
+	// _SETTINGS,
+	const rgblight_segment_t PROGMEM layer_settings_lights[] = RGBLIGHT_LAYER_SEGMENTS(
+		SET_LAYER_ID(HSV_PINK)
+	);
+	
+	// _SYMBOLS,
+	const rgblight_segment_t PROGMEM layer_symbols_lights[] = RGBLIGHT_LAYER_SEGMENTS(
+		SET_LAYER_ID(HSV_TEAL)
+	);
+	
+	// _SHORTCUTS,
+	const rgblight_segment_t PROGMEM layer_shortcuts_lights[] = RGBLIGHT_LAYER_SEGMENTS(
+		SET_LAYER_ID(HSV_BLUE)
+	);
+	
+	// _NUMPAD,
+	const rgblight_segment_t PROGMEM layer_numpad_lights[] = RGBLIGHT_LAYER_SEGMENTS(
+		SET_LAYER_ID(HSV_PURPLE)
+	);
+	
+	// _EXTRAS,
+	const rgblight_segment_t PROGMEM layer_extras_lights[] = RGBLIGHT_LAYER_SEGMENTS(
+		SET_LAYER_ID(HSV_ORANGE)
+	);
+	
+	// _BOARD,
+	const rgblight_segment_t PROGMEM layer_board_lights[] = RGBLIGHT_LAYER_SEGMENTS(
+		SET_LAYER_ID(HSV_GREEN)
+	);
+	
+	const rgblight_segment_t* const my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
+		layer_base_lights,
+		layer_settings_lights,
+		layer_symbols_lights,
+		layer_shortcuts_lights,
+		layer_numpad_lights,
+		layer_extras_lights,
+		layer_board_lights
+	);
+	
+	layer_state_t layer_state_set_user(layer_state_t state) {
+		rgblight_set_layer_state(0, layer_state_cmp(state, _BASE));
+		rgblight_set_layer_state(1, layer_state_cmp(state, _SETTINGS));
+		rgblight_set_layer_state(2, layer_state_cmp(state, _SYMBOLS));
+		rgblight_set_layer_state(3, layer_state_cmp(state, _SHORTCUTS));
+		rgblight_set_layer_state(4, layer_state_cmp(state, _NUMPAD));
+		rgblight_set_layer_state(5, layer_state_cmp(state, _EXTRAS));
+		rgblight_set_layer_state(6, layer_state_cmp(state, _BOARD));
+		
+		return state;
+	}
+	
+	void keyboard_post_init_user(void) {
+		// Enable the LED layers
+		rgblight_layers = my_rgb_layers;
+		rgblight_mode(10);// haven't found a way to set this in a more useful way
+	}
+#endif
 
 
 #ifdef OLED_ENABLE
