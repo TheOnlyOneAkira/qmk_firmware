@@ -27,13 +27,40 @@
 // Light combinations
 #define SET_INDICATORS(hsv) \
 	{0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
-    {36+0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}
-	
+    {35+0, 1, hsv}
+#define SET_UNDERGLOW(hsv) \
+	{1, 6, hsv}, \
+    {35+1, 6,hsv}
+#define SET_NUMPAD(hsv)     \
+	{35+15, 5, hsv},\
+	  {35+22, 3, hsv},\
+	  {35+27, 3, hsv}
+#define SET_NUMROW(hsv) \
+	{10, 2, hsv}, \
+		{20, 2, hsv}, \
+		{30, 2, hsv}, \
+	  {35+ 10, 2, hsv}, \
+	  {35+ 20, 2, hsv}, \
+	  {35+ 30, 2, hsv}
+#define SET_INNER_COL(hsv)	\
+	{33, 4, hsv}, \
+	  {35+ 33, 4, hsv}
+
+#define SET_OUTER_COL(hsv) \
+	{7, 4, hsv}, \
+	  {35+ 7, 4, hsv}
+#define SET_THUMB_CLUSTER(hsv) 	\
+	{25, 2, hsv}, \
+	  {35+ 25, 2, hsv}
 #define SET_LAYER_ID(hsv) 	\
 	{0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
-    {36+0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}
-
-
+    {35+0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
+		{1, 6, hsv}, \
+    {35+1, 6, hsv}, \
+		{7, 4, hsv}, \
+	  {35+ 7, 4, hsv}, \
+		{25, 2, hsv}, \
+	  {35+ 25, 2, hsv}
 
 
 enum sofle_layers {
@@ -273,7 +300,6 @@ keyboard_layouts = {
 		rgblight_set_layer_state(4, layer_state_cmp(state, _NUMPAD));
 		rgblight_set_layer_state(5, layer_state_cmp(state, _EXTRAS));
 		rgblight_set_layer_state(6, layer_state_cmp(state, _BOARD));
-		
 		return state;
 	}
 	
@@ -286,101 +312,99 @@ keyboard_layouts = {
 
 
 #ifdef OLED_ENABLE
-
-static void render_logo(void) {
-    static const char PROGMEM raw_logo[] = {
-        0,  0,  0,128,192,224,240,120, 56, 60, 28, 14, 14, 14, 14,142, 14, 14, 14, 14, 28, 28, 60,120,240,240,224,128,  0,  0,  0,  0,  0,248,254,255, 15,  1,  0,  0,  0,  0,  0,192,240,248,254,223,255,254,248,224,240,112,112, 56, 56, 61, 31,127,255,252,224,  0,  0, 31, 63,255,252,220,156,254,254,255,255,239,231,227,227,225,225,224,225,231,255,254,252,240,192,128,224,254,255, 31,  7,  0,  0,128,192,241,255,255,223,207,221,252,248,248,240,  0,  0,  0,  0,  0,  0,248,248,252,221,223,207,255,255,249,224,128,  0,  0,
-        0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
-        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
-        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-    };
-    oled_write_raw_P(raw_logo, sizeof(raw_logo));
-}
-
-
-static void print_status_narrow(void) {
-    // Print current mode
-    oled_write_P(PSTR("\n\n"), false);
-    oled_write_ln_P(PSTR("Mastr\nboard"), false);
-    //oled_write_ln_P(PSTR("Slave\nboard"), false);
-
-    oled_write_ln_P(PSTR(""), false);
-
-	//snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Undef-%ld", layer_state)
-
-    oled_write_ln_P(PSTR("Qwrt"), false);
-	
-    oled_write_P(PSTR("\n\n"), false);
-	
-    // Print current layer
-    oled_write_ln_P(PSTR("LAYER"), false);
-    switch (get_highest_layer(layer_state)) {
-		
-        case _BASE:
-            oled_write_P(PSTR("Base\n"), false);
-            break;
-			
-        case _SETTINGS:
-            oled_write_P(PSTR("Settn\n"), false);
-            break;
-			
-        case _SYMBOLS:
-            oled_write_P(PSTR("Symbl\n"), false);
-            break;
-			
-        case _SHORTCUTS:
-            oled_write_P(PSTR("Shtct\n"), false);
-            break;
-			
-        case _NUMPAD:
-            oled_write_P(PSTR("Nump\n"), false);
-            break;
-			
-        case _EXTRAS:
-            oled_write_P(PSTR("Extra\n"), false);
-            break;
-			
-        default:
-            oled_write_ln_P(PSTR("Undef\n"), false);
-    }
-}
-
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    if (is_keyboard_master()) {
-        return OLED_ROTATION_270;
-    }else{
-		return OLED_ROTATION_270;
+	static void render_logo(void) {
+		static const char PROGMEM raw_logo[] = {
+			0,  0,  0,128,192,224,240,120, 56, 60, 28, 14, 14, 14, 14,142, 14, 14, 14, 14, 28, 28, 60,120,240,240,224,128,  0,  0,  0,  0,  0,248,254,255, 15,  1,  0,  0,  0,  0,  0,192,240,248,254,223,255,254,248,224,240,112,112, 56, 56, 61, 31,127,255,252,224,  0,  0, 31, 63,255,252,220,156,254,254,255,255,239,231,227,227,225,225,224,225,231,255,254,252,240,192,128,224,254,255, 31,  7,  0,  0,128,192,241,255,255,223,207,221,252,248,248,240,  0,  0,  0,  0,  0,  0,248,248,252,221,223,207,255,255,249,224,128,  0,  0,
+			0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
+			0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		};
+		oled_write_raw_P(raw_logo, sizeof(raw_logo));
 	}
-    return rotation;
-}
 
-bool oled_task_user(void) {
-    if (is_keyboard_master()) {
+	static void print_status_narrow(void) {
+		// Print current mode
+		oled_write_P(PSTR("\n\n"), false);
+		oled_write_ln_P(PSTR("Mastr\nboard"), false);
+		//oled_write_ln_P(PSTR("Slave\nboard"), false);
+
+		oled_write_ln_P(PSTR(""), false);
+
+		//snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Undef-%ld", layer_state)
+
+		oled_write_ln_P(PSTR("Qwrt"), false);
 		
+		oled_write_P(PSTR("\n\n"), false);
+		
+		// Print current layer
+		oled_write_ln_P(PSTR("LAYER"), false);
 		switch (get_highest_layer(layer_state)) {
-			case _BOARD:
-				oled_write_P(PSTR("eeclr\n<-----\nboot\n----->\ndbtog\n<-----\nrbt\n----->\n"), false);
+			
+			case _BASE:
+				oled_write_P(PSTR("Base\n"), false);
 				break;
-			default:
-				print_status_narrow();
-				//render_logo();
-		}
-        
-		
-    } else {
-		
-		switch (get_highest_layer(layer_state)) {
-			case _BOARD:
-				oled_write_P(PSTR("eeclr\n<----\nboot\n---->\ndbtog\n<----\nrbt\n---->\n"), false);
+				
+			case _SETTINGS:
+				oled_write_P(PSTR("Settn\n"), false);
 				break;
+				
+			case _SYMBOLS:
+				oled_write_P(PSTR("Symbl\n"), false);
+				break;
+				
+			case _SHORTCUTS:
+				oled_write_P(PSTR("Shtct\n"), false);
+				break;
+				
+			case _NUMPAD:
+				oled_write_P(PSTR("Nump\n"), false);
+				break;
+				
+			case _EXTRAS:
+				oled_write_P(PSTR("Extra\n"), false);
+				break;
+				
 			default:
-				//print_status_narrow();
-				render_logo();
+				oled_write_ln_P(PSTR("Undef\n"), false);
 		}
-		
-    }
-    return false;
-}			
+	}
+
+	oled_rotation_t oled_init_user(oled_rotation_t rotation) {
+		if (is_keyboard_master()) {
+			return OLED_ROTATION_270;
+		}else{
+			return OLED_ROTATION_270;
+		}
+		return rotation;
+	}
+
+	bool oled_task_user(void) {
+		if (is_keyboard_master()) {
+			
+			switch (get_highest_layer(layer_state)) {
+				case _BOARD:
+					oled_write_P(PSTR("eeclr\n<-----\nboot\n----->\ndbtog\n<-----\nrbt\n----->\n"), false);
+					break;
+				default:
+					print_status_narrow();
+					//render_logo();
+			}
+			
+			
+		} else {
+			
+			switch (get_highest_layer(layer_state)) {
+				case _BOARD:
+					oled_write_P(PSTR("eeclr\n<----\nboot\n---->\ndbtog\n<----\nrbt\n---->\n"), false);
+					break;
+				default:
+					//print_status_narrow();
+					render_logo();
+			}
+			
+		}
+		return false;
+	}			
 #endif
 
 

@@ -13,22 +13,19 @@
   * You should have received a copy of the GNU General Public License
   * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-  #pragma once
+#pragma once
 
 
 //#define USE_MATRIX_I2C
 
 /* Select hand configuration */
-
-///https://thomasbaart.nl/2018/12/01/reducing-firmware-size-in-qmk/
-
-
 // #define MASTER_LEFT
 // #define MASTER_RIGHT
 #define EE_HANDS
 
-#define CUSTOM_FONT
+///https://thomasbaart.nl/2018/12/01/reducing-firmware-size-in-qmk/
 
+#define CUSTOM_FONT
 #define CUSTOM_LAYER_READ //if you remove this it causes issues - needs better guarding
 
 
