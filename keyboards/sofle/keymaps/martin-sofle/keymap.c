@@ -19,6 +19,12 @@
 
 #include QMK_KEYBOARD_H
 
+char wpm_str[10];
+
+
+
+
+
 #define INDICATOR_BRIGHTNESS 30
 
 #define HSV_OVERRIDE_HELP(h, s, v, Override) h, s , Override
@@ -27,40 +33,40 @@
 // Light combinations
 #define SET_INDICATORS(hsv) \
 	{0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
-    {35+0, 1, hsv}
+    {36+0, 1, hsv}
 #define SET_UNDERGLOW(hsv) \
 	{1, 6, hsv}, \
-    {35+1, 6,hsv}
+    {36+1, 6,hsv}
 #define SET_NUMPAD(hsv)     \
-	{35+15, 5, hsv},\
-	  {35+22, 3, hsv},\
-	  {35+27, 3, hsv}
+	{36+15, 5, hsv},\
+	  {36+22, 3, hsv},\
+	  {36+27, 3, hsv}
 #define SET_NUMROW(hsv) \
 	{10, 2, hsv}, \
 		{20, 2, hsv}, \
 		{30, 2, hsv}, \
-	  {35+ 10, 2, hsv}, \
-	  {35+ 20, 2, hsv}, \
-	  {35+ 30, 2, hsv}
+	  {36+ 10, 2, hsv}, \
+	  {36+ 20, 2, hsv}, \
+	  {36+ 30, 2, hsv}
 #define SET_INNER_COL(hsv)	\
 	{33, 4, hsv}, \
-	  {35+ 33, 4, hsv}
+	  {36+ 33, 4, hsv}
 
 #define SET_OUTER_COL(hsv) \
 	{7, 4, hsv}, \
-	  {35+ 7, 4, hsv}
+	  {36+ 7, 4, hsv}
 #define SET_THUMB_CLUSTER(hsv) 	\
 	{25, 2, hsv}, \
-	  {35+ 25, 2, hsv}
+	  {36+ 25, 2, hsv}
 #define SET_LAYER_ID(hsv) 	\
 	{0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
-    {35+0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
+    {36+0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
 		{1, 6, hsv}, \
-    {35+1, 6, hsv}, \
+    {36+1, 6, hsv}, \
 		{7, 4, hsv}, \
-	  {35+ 7, 4, hsv}, \
+	  {36+ 7, 4, hsv}, \
 		{25, 2, hsv}, \
-	  {35+ 25, 2, hsv}
+	  {36+ 25, 2, hsv}
 
 
 enum sofle_layers {
@@ -74,21 +80,56 @@ enum sofle_layers {
 	_BOARD
 };
 
+
+
+
+
+
+typedef struct {
+  bool is_press_action;
+  int state;
+} tap;
+
+//Define a type for as many tap dance states as you need
+enum {
+  SINGLE_TAP = 1,
+  SINGLE_HOLD = 2,
+  DOUBLE_TAP = 3
+};
+
+enum {
+  RCTRL_LAYR = 0     //Our custom tap dance key; add any other tap dance keys to this enum 
+};
+
+//Declare the functions to be used with your tap dance key(s)
+
+//Function associated with all tap dances
+int cur_dance (tap_dance_state_t *state);
+
+//Functions associated with individual tap dances
+void rctrl_finished (tap_dance_state_t *state, void *user_data);
+void rctrl_reset (tap_dance_state_t *state, void *user_data);
+
+
+
+
+// const ATDD = ACTION_TAP_DANCE_DOUBLE;
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	
 	// 0
 	[_BASE] = LAYOUT(
-	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------+---------+---------+---------+
-	          KC_ESC       , KC_1 ,  KC_2   ,  KC_3   ,      KC_4      , LT(_SETTINGS,KC_5) ,                                   LT(_SETTINGS,KC_6) ,     KC_7     ,  KC_8   ,  KC_9   ,  KC_0   , KC_GRV  ,
-	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------+---------+---------+---------+
-	    LT(_NUMPAD,KC_TAB) , KC_Q ,  KC_W   ,  KC_E   ,      KC_R      ,        KC_T        ,                                          KC_Y        ,     KC_U     ,  KC_I   ,  KC_O   ,  KC_P   , KC_BSPC ,
- 	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------+---------+---------+---------+
-	         KC_LSFT       , KC_A ,  KC_S   ,  KC_D   ,      KC_F      ,        KC_G        ,                                          KC_H        ,     KC_J     ,  KC_K   ,  KC_L   , KC_SCLN , KC_QUOT ,
-	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------+---------+---------+---------+
-	         KC_LCTL       , KC_Z ,  KC_X   ,  KC_C   ,      KC_V      ,        KC_B        , KC_MPLY ,               KC_MUTE ,        KC_N        ,     KC_M     , KC_COMM , KC_DOT  , KC_SLSH , KC_RSFT ,
-	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------+---------+---------+---------+
-	                                KC_LALT , KC_LGUI , MO(_SHORTCUTS) ,       KC_SPC       , KC_ENT  ,               KC_ENT  ,        KC_SPC      , MO(_SYMBOLS) , KC_RCTL , KC_RALT                     
-	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------+---------+---------+---------+
+	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------------+---------+---------+---------+
+	          KC_ESC       , KC_1 ,  KC_2   ,  KC_3   ,      KC_4      , LT(_SETTINGS,KC_5) ,                                   LT(_SETTINGS,KC_6) ,     KC_7     ,     KC_8      ,  KC_9   ,  KC_0   , KC_GRV  ,
+	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------------+---------+---------+---------+
+	    LT(_NUMPAD,KC_TAB) , KC_Q ,  KC_W   ,  KC_E   ,      KC_R      ,        KC_T        ,                                          KC_Y        ,     KC_U     ,     KC_I      ,  KC_O   ,  KC_P   , KC_BSPC ,
+ 	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------------+---------+---------+---------+
+	         KC_LSFT       , KC_A ,  KC_S   ,  KC_D   ,      KC_F      ,        KC_G        ,                                          KC_H        ,     KC_J     ,     KC_K      ,  KC_L   , KC_SCLN , KC_QUOT ,
+	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------------+---------+---------+---------+
+	         KC_LCTL       , KC_Z ,  KC_X   ,  KC_C   ,      KC_V      ,        KC_B        , KC_MPLY ,               KC_MUTE ,        KC_N        ,     KC_M     ,    KC_COMM    , KC_DOT  , KC_SLSH , KC_RSFT ,
+	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------------+---------+---------+---------+
+	                                KC_LALT , KC_LGUI , MO(_SHORTCUTS) ,       KC_SPC       , KC_ENT  ,               KC_ENT  ,        KC_SPC      , MO(_SYMBOLS) , TD(RCTRL_LAYR) , KC_RALT                     
+	//+--------------------+------+---------+---------+----------------+--------------------+---------+------+------+---------+--------------------+--------------+---------------+---------+---------+---------+
 ),
 
 	// 1
@@ -108,17 +149,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 	// 2
 	[_SYMBOLS] = LAYOUT(
-	//+---------+---------+---------+---------+-------------+---------+---------+------+------+---------+---------+---------------+--------------+---------------+---------------+---------+
-	    KC_TRNS ,  KC_F1  ,  KC_F2  ,  KC_F3  ,    KC_F4    ,  KC_F5  ,                                    KC_F6  ,     KC_F7     ,    KC_F8     ,     KC_F9     ,    KC_F10     , KC_F11  ,
-	//+---------+---------+---------+---------+-------------+---------+---------+------+------+---------+---------+---------------+--------------+---------------+---------------+---------+
-	    KC_TRNS ,  KC_NO  ,  KC_NO  ,  KC_NO  ,    KC_NO    ,  KC_NO  ,                                    KC_5   ,  RALT(KC_5)   ,  RALT(KC_4)  , LSFT(KC_LBRC) ,  RALT(KC_E)   , KC_F12  ,
-	//+---------+---------+---------+---------+-------------+---------+---------+------+------+---------+---------+---------------+--------------+---------------+---------------+---------+
-	    KC_TRNS ,  KC_NO  ,  KC_NO  ,  KC_NO  ,    KC_NO    ,  KC_NO  ,                                   KC_MINS , RALT(KC_MINS) , RALT(KC_EQL) ,    KC_LBRC    ,    KC_RBRC    , KC_TRNS ,
-	//+---------+---------+---------+---------+-------------+---------+---------+------+------+---------+---------+---------------+--------------+---------------+---------------+---------+
-	    KC_TRNS ,  KC_NO  ,  KC_P1  , KC_PLUS ,   KC_DOT    , KC_RCBR , KC_TRNS ,               KC_TRNS ,  KC_NO  ,     KC_NO     ,    KC_NO     ,   RALT(KC_8)  , LSFT(KC_RBRC) , KC_TRNS ,
-	//+---------+---------+---------+---------+-------------+---------+---------+------+------+---------+---------+---------------+--------------+---------------+---------------+---------+
-	                        KC_TRNS , KC_TRNS , MO(_EXTRAS) , KC_TRNS , KC_TRNS ,               KC_TRNS , KC_TRNS ,    KC_TRNS    ,   KC_TRNS    ,    KC_TRNS                              
-	//+---------+---------+---------+---------+-------------+---------+---------+------+------+---------+---------+---------------+--------------+---------------+---------------+---------+
+	//+---------+---------+---------+-------------+----------------+-------------+---------+------+------+---------+------------+---------------+--------------+---------------+---------------+---------+
+	    KC_TRNS ,  KC_F1  ,  KC_F2  ,    KC_F3    ,      KC_F4     ,     KC_F5   ,                                      KC_F6   ,     KC_F7     ,    KC_F8     ,     KC_F9     ,    KC_F10     , KC_F11  ,
+	//+---------+---------+---------+-------------+----------------+-------------+---------+------+------+---------+------------+---------------+--------------+---------------+---------------+---------+
+	    KC_TRNS ,  KC_NO  ,  KC_NO  ,    KC_NO    ,      KC_NO     ,     KC_NO   ,                                      KC_5    ,  RALT(KC_5)   ,  RALT(KC_4)  , LSFT(KC_LBRC) ,  RALT(KC_E)   , KC_F12  ,
+	//+---------+---------+---------+-------------+----------------+-------------+---------+------+------+---------+------------+---------------+--------------+---------------+---------------+---------+
+	    KC_TRNS ,  KC_NO  ,  KC_NO  ,    KC_NO    ,      KC_NO     ,     KC_NO   ,                                     KC_MINS  , RALT(KC_MINS) , RALT(KC_EQL) ,    KC_LBRC    ,    KC_RBRC    , KC_TRNS ,
+	//+---------+---------+---------+-------------+----------------+-------------+---------+------+------+---------+------------+---------------+--------------+---------------+---------------+---------+
+	    KC_TRNS ,  KC_NO  ,  KC_P1  , KC_KP_SLASH , KC_KP_ASTERISK ,   KC_EQUAL  , KC_TRNS ,               KC_TRNS ,  KC_EQUAL  ,   KC_PLUS     ,   KC_MINUS   ,   RALT(KC_8)  , LSFT(KC_RBRC) , KC_TRNS ,
+	//+---------+---------+---------+-------------+----------------+-------------+---------+------+------+---------+------------+---------------+--------------+---------------+---------------+---------+
+	                        KC_TRNS ,   KC_TRNS   ,   MO(_EXTRAS)  ,   KC_TRNS   , KC_TRNS ,               KC_TRNS ,   KC_TRNS  ,    KC_TRNS    ,   KC_TRNS    ,    KC_TRNS                              
+	//+---------+---------+---------+-------------+----------------+-------------+---------+------+------+---------+------------+---------------+--------------+---------------+---------------+---------+
 ),
 
 	// 3
@@ -179,6 +220,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//+-------+-------+-------+-------+---------+---------+-------+------+------+-------+---------------+---------+-------+---------------+-------+-------+
 	                    KC_NO , KC_NO ,  KC_NO  ,  KC_NO  , KC_NO ,               KC_NO ,     KC_NO     ,  KC_NO  , KC_NO ,     KC_NO                     
 	//+-------+-------+-------+-------+---------+---------+-------+------+------+-------+---------------+---------+-------+---------------+-------+-------+
+	
 )
 
 };
@@ -249,7 +291,7 @@ keyboard_layouts = {
 	
 	// _BASE,
 	const rgblight_segment_t PROGMEM layer_base_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-		SET_LAYER_ID(HSV_RED)
+		SET_LAYER_ID(HSV_YELLOW)
 	);
 	
 	// _SETTINGS,
@@ -264,7 +306,7 @@ keyboard_layouts = {
 	
 	// _SHORTCUTS,
 	const rgblight_segment_t PROGMEM layer_shortcuts_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-		SET_LAYER_ID(HSV_BLUE)
+		SET_LAYER_ID(HSV_GREEN)
 	);
 	
 	// _NUMPAD,
@@ -279,7 +321,7 @@ keyboard_layouts = {
 	
 	// _BOARD,
 	const rgblight_segment_t PROGMEM layer_board_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-		SET_LAYER_ID(HSV_GREEN)
+		SET_LAYER_ID(HSV_WHITE)
 	);
 	
 	const rgblight_segment_t* const my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
@@ -331,8 +373,9 @@ keyboard_layouts = {
 		oled_write_ln_P(PSTR(""), false);
 
 		//snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Undef-%ld", layer_state)
-
-		oled_write_ln_P(PSTR("Qwrt"), false);
+		
+		sprintf(wpm_str, "wpm: %03d", get_current_wpm());
+        oled_write(PSTR(wpm_str), false);
 		
 		oled_write_P(PSTR("\n\n"), false);
 		
@@ -408,8 +451,6 @@ keyboard_layouts = {
 #endif
 
 
-
-
 /* //tri layer state
 layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
@@ -473,7 +514,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 */
 
 #ifdef ENCODER_ENABLE
-
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) {
         if (clockwise) {
@@ -492,3 +532,56 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 }
 
 #endif
+
+
+//                           tap dance custom
+//Determine the current tap dance state
+int cur_dance (tap_dance_state_t *state) {
+  if (state->count == 1) {
+    if (!state->pressed) {
+      return SINGLE_TAP;
+    } else {
+      return SINGLE_HOLD;
+    }
+  } else if (state->count == 2) {
+    return DOUBLE_TAP;
+  }
+  else return 8;
+}
+
+//Initialize tap structure associated with example tap dance key
+static tap rctrl_tap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+//Functions that control what our tap dance key does
+void rctrl_finished (tap_dance_state_t *state, void *user_data) {
+  rctrl_tap_state.state = cur_dance(state);
+  switch (rctrl_tap_state.state) {
+    case SINGLE_TAP: 
+      tap_code(KC_RCTL); 
+      break;
+    case SINGLE_HOLD: 
+      tap_code(KC_RCTL); 
+      break;
+    case DOUBLE_TAP: 
+      layer_on(_SHORTCUTS); 
+      break;
+  }
+}
+
+void rctrl_reset (tap_dance_state_t *state, void *user_data) {
+  //if the key was held down and now is released then switch off the layer
+  if (rctrl_tap_state.state==DOUBLE_TAP) {
+    layer_off(_SHORTCUTS);
+  }
+  rctrl_tap_state.state = 0;
+}
+
+//Associate our tap dance key with its functionality
+tap_dance_action_t tap_dance_actions[] = {
+  //[RCTRL_LAYR] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, rctrl_finished, rctrl_reset, 275)
+  [RCTRL_LAYR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, rctrl_finished, rctrl_reset)
+};
+

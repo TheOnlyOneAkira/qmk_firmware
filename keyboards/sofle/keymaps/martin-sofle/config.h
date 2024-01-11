@@ -31,11 +31,20 @@
 #define CUSTOM_FONT
 #define CUSTOM_LAYER_READ //if you remove this it causes issues - needs better guarding
 
-#define QUICK_TAP_TERM 0
+#ifdef TAP_CODE_DELAY
+	#undef TAP_CODE_DELAY
+	#define TAP_CODE_DELAY 20
+#endif
+#ifdef QUICK_TAP_TERM
+	#undef QUICK_TAP_TERM
+	#define QUICK_TAP_TERM 0
+#endif
 #ifdef TAPPING_TERM
     #undef TAPPING_TERM
     #define TAPPING_TERM 200
 #endif
+// #define TAPPING_TERM 175
+// #define TAPPING_TERM_PER_KEY
 #define ENCODER_DIRECTION_FLIP
 
 
@@ -60,9 +69,9 @@
 	//#define RGBLIGHT_EFFECT_ALTERNATING
 	//#define RGBLIGHT_EFFECT_TWINKLE
 
-    #define RGBLED_NUM 70
+    #define RGBLED_NUM 72
 	//#define RGBLED_SPLIT
-	#define RGBLED_SPLIT { 35, 35 } // haven't figured out how to use this yet
+	#define RGBLED_SPLIT { 36, 36 } // haven't figured out how to use this yet
 
 	//#define RGBLED_NUM 30
     #define RGBLIGHT_LIMIT_VAL 120
