@@ -1,3 +1,5 @@
+// STATE = TO VERIFY
+
 
  /* Copyright 2021 Dane Evans
   *
@@ -169,9 +171,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//+---------+------------+------------+------------+------------+---------------+---------+------+------+---------+---------+---------------+---------+---------------+---------------+---------+
 	    KC_TRNS ,   KC_INS   ,  KC_PSCR   ,   KC_APP   ,   KC_NO    , LCTL(KC_PSLS) ,                                   KC_PGUP , LCTL(KC_LEFT) ,  KC_UP  , LCTL(KC_RGHT) , LCTL(KC_BSPC) , KC_BSPC ,
 	//+---------+------------+------------+------------+------------+---------------+---------+------+------+---------+---------+---------------+---------+---------------+---------------+---------+
-	    KC_TRNS ,  KC_LALT   ,  KC_LCTL   ,  KC_LSFT   ,   KC_NO    ,    KC_CAPS    ,                                   KC_PGDN ,    KC_LEFT    , KC_DOWN ,    KC_RGHT    ,    KC_DEL     , KC_BSPC ,
+	    KC_TRNS ,   KC_BSLS  ,  KC_LCTL   ,  KC_LSFT   ,   KC_NO    ,    KC_TRNS    ,                                   KC_PGDN ,    KC_LEFT    , KC_DOWN ,    KC_RGHT    ,    KC_DEL     , KC_BSPC ,
 	//+---------+------------+------------+------------+------------+---------------+---------+------+------+---------+---------+---------------+---------+---------------+---------------+---------+
-	    KC_TRNS , LCTL(KC_Z) , LCTL(KC_X) , LCTL(KC_C) , LCTL(KC_V) ,     KC_NO     , KC_TRNS ,               KC_TRNS ,  KC_NO  ,    KC_HOME    ,  KC_NO  ,    KC_END     ,     KC_NO     , KC_TRNS ,
+	    KC_LALT , LCTL(KC_Z) , LCTL(KC_X) , LCTL(KC_C) , LCTL(KC_V) ,     KC_NO     , KC_TRNS ,               KC_TRNS ,  KC_NO  ,    KC_HOME    ,  KC_NO  ,    KC_END     ,     KC_NO     , KC_CAPS ,
 	//+---------+------------+------------+------------+------------+---------------+---------+------+------+---------+---------+---------------+---------+---------------+---------------+---------+
 	                            KC_TRNS   ,  KC_TRNS   ,  KC_TRNS   ,    KC_TRNS    , KC_TRNS ,               KC_TRNS , KC_TRNS ,  MO(_EXTRAS)  , KC_TRNS ,    KC_TRNS                              
 	//+---------+------------+------------+------------+------------+---------------+---------+------+------+---------+---------+---------------+---------+---------------+---------------+---------+
